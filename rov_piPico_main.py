@@ -36,6 +36,12 @@ f6_pwm = PWM(f6)
 f6_pwm.freq(50)
 f6d = 0
 
+c1 = machine.Pin(8)
+c1_pwm = PWM(c1)
+c1_pwm.freq(50)
+c1d = 0
+
+
 l = int(65025/2)
 led = Pin(25,Pin.OUT)
 uart1 = UART(1, baudrate=9600, tx=4, rx=5)  # TX on Pin 4, RX on Pin 5
@@ -55,6 +61,7 @@ def receive_data():
 
 
 while True:
+    send_data(input())
     # Check for incoming data
     received = receive_data()
     if received:
@@ -92,6 +99,24 @@ while True:
         (f1d,f2d,f3d,f4d,f5d,f6d) = (0,0,65025,0,0,65025)
     elif cmd == b'ee':
         (f1d,f2d,f3d,f4d,f5d,f6d) = (0,0,l,0,0,l)
+    elif cmd == b'oo':
+        c1d += 1
+        if c1d > 12:
+            c1d = 0
+        print(c1d)
+    elif cmd == b'pp':
+        c1d -= 1:
+        if c1d < 0:
+            c1d = 12
+    elif cmd == b'zz':
+        f1_pwm.deinit()
+        f2_pwm.deinit()
+        f3_pwm.deinit()
+        f4_pwm.deinit()
+        f5_pwm.deinit()
+        f6_pwm.deinit()
+        c1_pwm.deinit()
+        
     
     f1_pwm.duty_u16(f1d)
     f2_pwm.duty_u16(f2d)
