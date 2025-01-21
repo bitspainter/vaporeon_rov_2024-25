@@ -105,7 +105,7 @@ while True:
             c1d = 0
         print(c1d)
     elif cmd == b'pp':
-        c1d -= 1:
+        c1d -= 1
         if c1d < 0:
             c1d = 12
     elif cmd == b'zz':
