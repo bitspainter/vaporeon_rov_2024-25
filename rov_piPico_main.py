@@ -41,6 +41,10 @@ c1_pwm = PWM(c1)
 c1_pwm.freq(50)
 c1d = 0
 
+c2 = machine.Pin(9)
+c2_pwm = PWM(c2)
+c2_pwm.freq(50)
+c2d = 0
 
 l = int(65025/2)
 led = Pin(25,Pin.OUT)
@@ -61,11 +65,11 @@ def receive_data():
 
 
 while True:
-    send_data(input())
+    
     # Check for incoming data
     received = receive_data()
     if received:
-        led.toggle()
+        
         print("Raw Received Data:", received)  # Print raw bytes
         try:
             decoded_data = received.decode('utf-8')  # Decode bytes to string
@@ -78,7 +82,7 @@ while True:
 
     cmd = received
 
-    if cmd == b'ff':
+    if cmd == b'f':
         f1_pwm.duty_u16(int(65025*0.75))
         f2_pwm.duty_u16(int(65025*0.75))
         f3_pwm.duty_u16(int(65025*0.75))
@@ -87,28 +91,37 @@ while True:
         f6_pwm.duty_u16(int(65025*0.75))
         sleep(2)
        
-    if cmd == b'ww':
+    if cmd == b'w':
+        led.toggle()
         (f1d,f2d,f3d,f4d,f5d,f6d) = (65025,65025,0,65025,65025,0)
-    elif cmd == b'ss':
+    elif cmd == b's':
         (f1d,f2d,f3d,f4d,f5d,f6d) = (l,l,0,l,l,0)
-    elif cmd == b'aa':
+    elif cmd == b'a':
         (f1d,f2d,f3d,f4d,f5d,f6d) = (l,65025,0,l,65025,0)
-    elif cmd == b'dd':
+    elif cmd == b'd':
         (f1d,f2d,f3d,f4d,f5d,f6d) = (65025,l,0,65025,l,0)
-    elif cmd == b'qq':
+    elif cmd == b'q':
         (f1d,f2d,f3d,f4d,f5d,f6d) = (0,0,65025,0,0,65025)
-    elif cmd == b'ee':
+    elif cmd == b'e':
         (f1d,f2d,f3d,f4d,f5d,f6d) = (0,0,l,0,0,l)
-    elif cmd == b'oo':
+    elif cmd == b'o':
         c1d += 1
         if c1d > 12:
             c1d = 0
         print(c1d)
-    elif cmd == b'pp':
+    elif cmd == b'p':
         c1d -= 1
         if c1d < 0:
             c1d = 12
-    elif cmd == b'zz':
+    elif cmd == b'x':
+        c2d += 1
+        if c1d > 30:
+            c1d = 0
+    elif cmd == b'c':
+        c2d -= 1
+        if c2d < 0:
+            c2d = 30
+    elif cmd == b'z':
         f1_pwm.deinit()
         f2_pwm.deinit()
         f3_pwm.deinit()
@@ -118,6 +131,8 @@ while True:
         c1_pwm.deinit()
         
     
+    c1_pwm.duty_u16(int((c1d/100)*65025))
+    c2_pwm.duty_u16(int((c2d/1000)*65025))
     f1_pwm.duty_u16(f1d)
     f2_pwm.duty_u16(f2d)
     f3_pwm.duty_u16(f3d)
@@ -125,3 +140,4 @@ while True:
     f5_pwm.duty_u16(f5d)
     f6_pwm.duty_u16(f6d)
     print(f1d,f2d,f3d,f4d,f5d,f6d)
+
