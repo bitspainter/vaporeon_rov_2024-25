@@ -1,0 +1,57 @@
+from machine import Pin, PWM
+import time
+
+DIR_PIN = Pin(15, Pin.OUT)
+STEP_PIN = Pin(14, Pin.OUT)
+SERVO_PIN = Pin(0)
+
+servo = PWM(SERVO_PIN, freq=50)
+
+
+def turn_servo(angle):
+    duty = int(angle/180 * 10000)
+    servo.duty_u16(duty)
+
+def turn_stepper (steps, direction):
+    DIR_PIN.value(direction)
+    for i in range (steps):
+        STEP_PIN.value(1)
+        time.sleep(0.001)
+        STEP_PIN.value(0)
+        time.sleep(0.001)
+
+angle = 90
+speed = 5
+        
+while True:
+    turn_servo(angle)
+    command = input().strip().lower() 
+    if command == "d":
+        turn_stepper(10*speed,1)
+        time.sleep(0.001)
+    elif command == "a":
+        turn_stepper(10*speed,0)
+        time.sleep(0.001)
+        
+    elif command == "q":
+        angle += 4*speed
+        if angle > 150:
+            angle = 150
+        print(f"angle: {angle}")
+    elif command == "e":
+        angle -= 4*speed
+        if angle < 30:
+            angle = 30
+        print(f"angle: {angle}")
+    elif command == "r":
+        angle = 90
+        print(f"angle: {angle}")
+        
+    elif command == "z":
+        speed = 1
+        print(f"speed: {speed}")
+    elif command == "x":
+        speed = 5
+        print(f"speed: {speed}")
+    elif command == "c":
+        speed = 10
