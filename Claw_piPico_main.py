@@ -59,8 +59,7 @@ while True:
     command = input("Enter command: ").strip().lower()
 
     
-    #secondary pitch
-    
+    # secondary pitch
     if command == "q":
         angle1 += 10
         if angle1 > 150:
@@ -83,7 +82,6 @@ while True:
             angle2 = 30
     
     # clamp
-    
     elif command == "c":  
         angle3 += 10
         if angle3 > 150:
