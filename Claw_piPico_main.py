@@ -92,12 +92,6 @@ while True:
         if angle3 < 30:
             angle3 = 30
 
-    # reset
-    elif command == "r":
-        angle1 = 90
-        angle2 = 90
-        angle3 = 90
-
     # rotation
     elif command == "d":
         turn_stepper(30, 1, 1)  
