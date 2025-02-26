@@ -38,7 +38,7 @@ def turn_stepper(steps, direction, stepper_number):
     elif stepper_number == 2: # main pitch
         DIR_PIN2.value(direction)
        
-       for i in range(steps):
+        for i in range(steps):
             STEP_PIN2.value(1)
             time.sleep(0.001)
             STEP_PIN2.value(0)
