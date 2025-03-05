@@ -1,3 +1,4 @@
+
 from machine import Pin, PWM
 import time
 
@@ -94,20 +95,21 @@ while True:
 
     # rotation
     elif command == "d":
-        turn_stepper(30, 1, 1)  
+        turn_stepper(1600, 1, 1)  
         time.sleep(0.001)
 
     elif command == "a":
-        turn_stepper(30, 0, 1)  
+        turn_stepper(1600, 0, 1)  
         time.sleep(0.001)
     
     # main pitch
     elif command == "w":
-        turn_stepper(30, 1, 2)  
+        turn_stepper(1600, 1, 2)  
         time.sleep(0.001)
 
     elif command == "s":
-        turn_stepper(30, 0, 2)  
+        turn_stepper(1600, 0, 2)  
         time.sleep(0.001)
 
    
+
