@@ -1,4 +1,3 @@
-
 from machine import Pin, PWM
 import time
 
@@ -21,6 +20,9 @@ servo1 = PWM(SERVO1_PIN, freq=50)
 servo2 = PWM(SERVO2_PIN, freq=50)
 servo3 = PWM(SERVO3_PIN, freq=50)
 
+#delay
+delay = 0.01
+
 def turn_servo(servo, angle):
     duty = int(angle / 180 * 10000)  
     servo.duty_u16(duty)
@@ -32,18 +34,18 @@ def turn_stepper(steps, direction, stepper_number):
         
         for i in range(steps):
             STEP_PIN1.value(1)
-            time.sleep(0.001)
+            time.sleep(delay)
             STEP_PIN1.value(0)
-            time.sleep(0.001)
+            time.sleep(delay)
             
     elif stepper_number == 2: # main pitch
         DIR_PIN2.value(direction)
        
         for i in range(steps):
             STEP_PIN2.value(1)
-            time.sleep(0.001)
+            time.sleep(delay)
             STEP_PIN2.value(0)
-            time.sleep(0.001)
+            time.sleep(delay)
 
 # Initial servo angles 
 angle1 = 90
@@ -96,20 +98,20 @@ while True:
     # rotation
     elif command == "d":
         turn_stepper(1600, 1, 1)  
-        time.sleep(0.001)
+        time.sleep(delay)
 
     elif command == "a":
         turn_stepper(1600, 0, 1)  
-        time.sleep(0.001)
+        time.sleep(delay)
     
     # main pitch
     elif command == "w":
         turn_stepper(1600, 1, 2)  
-        time.sleep(0.001)
+        time.sleep(delay)
 
     elif command == "s":
         turn_stepper(1600, 0, 2)  
-        time.sleep(0.001)
+        time.sleep(delay)
 
    
 
