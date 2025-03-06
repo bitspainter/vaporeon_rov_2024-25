@@ -21,7 +21,7 @@ servo2 = PWM(SERVO2_PIN, freq=50)
 servo3 = PWM(SERVO3_PIN, freq=50)
 
 #delay
-delay = 0.01
+delay = 0.001
 
 def turn_servo(servo, angle):
     duty = int(angle / 180 * 10000)  
