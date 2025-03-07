@@ -1,4 +1,5 @@
 
+
 from machine import Pin, PWM
 import time
 
@@ -62,37 +63,41 @@ while True:
 
     command = input("Enter command: ").strip().lower()
 
-    
+    #reset
+    if command == "r":
+        angle1 = angle2 = angle3 = 90
+        
     # secondary pitch
     if command == "e":
-        angle1 += 10
+        angle1 += 20
         if angle1 > 150:
             angle1 = 150
 
     elif command == "q":
-        angle1 -= 10
+        angle1 -= 20
         if angle1 < 30:
             angle1 = 30
 
     # roll
     elif command == "x":  
-        angle2 += 10
+        angle2 += 30
         if angle2 > 150:
             angle2 = 150
 
     elif command == "z":  
-        angle2 -= 10
+        angle2 -= 30
         if angle2 < 30:
             angle2 = 30
     
     # clamp
     elif command == "c":  
-        angle3 += 10
+        angle3 += 60
         if angle3 > 150:
             angle3 = 150
 
     elif command == "v":  
-        angle3 -= 10
+        angle3 -= 60
+        
         if angle3 < 30:
             angle3 = 30
 
