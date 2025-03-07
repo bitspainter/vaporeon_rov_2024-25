@@ -1,3 +1,4 @@
+
 from machine import Pin, PWM
 import time
 
@@ -63,23 +64,23 @@ while True:
 
     
     # secondary pitch
-    if command == "q":
+    if command == "e":
         angle1 += 10
         if angle1 > 150:
             angle1 = 150
 
-    elif command == "e":
+    elif command == "q":
         angle1 -= 10
         if angle1 < 30:
             angle1 = 30
 
     # roll
-    elif command == "z":  
+    elif command == "x":  
         angle2 += 10
         if angle2 > 150:
             angle2 = 150
 
-    elif command == "x":  
+    elif command == "z":  
         angle2 -= 10
         if angle2 < 30:
             angle2 = 30
