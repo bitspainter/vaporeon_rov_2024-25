@@ -2,18 +2,18 @@ from machine import Pin, PWM
 import time
 
 # Servo pins
-SERVO4_PIN = Pin(8)  # main pitch
-SERVO5_PIN = Pin(7)  # rotation
+SERVO4_PIN = Pin(28)  # main pitch
+SERVO5_PIN = Pin(27)  # rotation
 
-SERVO1_PIN = Pin(9)  # secondary pitch
-SERVO2_PIN = Pin(10) # roll
-SERVO3_PIN = Pin(11) # clamp
+SERVO1_PIN = Pin(26)  # secondary pitch
+SERVO2_PIN = Pin(22) # roll
+SERVO3_PIN = Pin(21) # clamp
 
 # New servos
-SERVO6_PIN = Pin(12) # new servo 1
-SERVO7_PIN = Pin(13) # new servo 2
-SERVO8_PIN = Pin(14) # new servo 3
-SERVO9_PIN = Pin(15) # new servo 4
+SERVO6_PIN = Pin(20) # new servo 1
+SERVO7_PIN = Pin(19) # new servo 2
+SERVO8_PIN = Pin(18) # new servo 3
+SERVO9_PIN = Pin(17) # new servo 4
 SERVO10_PIN = Pin(16) # new servo 5
 
 # PWM instances
