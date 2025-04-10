@@ -72,6 +72,8 @@ angle6 = angle7 = angle8 = angle9 = angle10 = 90
 
 s = 3
 
+angleinc = 3
+
 cmd = ''
 while True:
     
@@ -86,6 +88,8 @@ while True:
     turn_servo(servo8, angle8) # new servo 3
     turn_servo(servo9, angle9) # new servo 4
     turn_servo(servo10, angle10) # new servo 5
+    
+    time.sleep(0.01)
 
     if uart.any():
         cmd = uart.read()
@@ -132,120 +136,140 @@ while True:
         
         # Reset
     if cmd == '10':
-        angle1 = angle2 = angle3 = angle4 = angle5 = 90
-        angle6 = angle7 = angle8 = angle9 = angle10 = 90 # reset new servos
+        angle1 = 90
+        time.sleep (0.01)
+        angle2 = 90
+        time.sleep (0.01)
+        angle3 = 90
+        time.sleep (0.01)
+        angle4 = 90
+        time.sleep (0.01)
+        angle5 = 90
+        time.sleep (0.01)
+        angle6 = 90
+        time.sleep (0.01)
+        angle7 = 90
+        time.sleep (0.01)
+        angle8 = 90
+        time.sleep (0.01)
+        angle9 = 90
+        time.sleep (0.01)
+        angle10 = 90
+        time.sleep (0.01)
+        
+        
 
     # Secondary pitch
     if cmd == 'z':
-        angle1 += 1
+        angle1 += angleinc
         if angle1 > 150:
             angle1 = 150
 
     elif cmd == 'x':
-        angle1 -= 1
+        angle1 -= angleinc
         if angle1 < 30:
             angle1 = 30
 
     # Roll
     elif cmd == 'c':  
-        angle2 += 1
+        angle2 += angleinc
         if angle2 > 150:
             angle2 = 150
 
     elif cmd == 'v':  
-        angle2 -= 1
+        angle2 -= angleinc
         if angle2 < 30:
             angle2 = 30
     
     # Clamp
     elif cmd == 'b':  
-        angle3 += 1
+        angle3 += angleinc
         if angle3 > 150:
             angle3 = 150
 
     elif cmd == 'n':  
-        angle3 -= 1
+        angle3 -= angleinc
         if angle3 < 30:
             angle3 = 30
 
     # Main pitch
     elif cmd == 'm':  
-        angle4 += 1
+        angle4 += angleinc
         if angle4 > 150:
             angle4 = 150
 
     elif cmd == ',':  
-        angle4 -= 1
+        angle4 -= angleinc
         if angle4 < 30:
             angle4 = 30          
   
     # Rotation
     elif cmd == '.':  
-        angle5 += 1
+        angle5 += angleinc
         if angle5 > 150:
             angle5 = 150
             
     elif cmd == '/':  
-        angle5 -= 1
+        angle5 -= angleinc
         if angle5 < 30:
             angle5 = 30
 
     # Control new servos
     # New servo 1
     elif cmd == '1':
-        angle6 += 1
+        angle6 += angleinc
         if angle6 > 150:
             angle6 = 150
   
             
     elif cmd == '2':
-        angle6 -= 1
+        angle6 -= angleinc
         if angle6 < 30:
             angle6 = 30
   
 
     # New servo 2
     elif cmd == '3':
-        angle7 += 1
+        angle7 += angleinc
         if angle7 > 150:
             angle7 = 150
 
             
     elif cmd == '4':
-        angle7 -= 1
+        angle7 -= angleinc
         if angle7 < 30:
             angle7 = 30
 
     # New servo 3
     elif cmd == '5':
-        angle8 += 1
+        angle8 += angleinc
         if angle8 > 150:
             angle8 = 150
             
     elif cmd == '6':
-        angle8 -= 1
+        angle8 -= angleinc
         if angle8 < 30:
             angle8 = 30
 
     # New servo 4
     elif cmd == '7':
-        angle9 += 1
+        angle9 += angleinc
         if angle9 > 150:
             angle9 = 150
             
     elif cmd == '8':
-        angle9 -= 1
+        angle9 -= angleinc
         if angle9 < 30:
             angle9 = 30
 
     # New servo 5
     elif cmd == '9':
-        angle10 += 1
+        angle10 += angleinc
         if angle10 > 150:
             angle10 = 150
             
     elif cmd == '0':
-        angle10 -= 1
+        angle10 -= angleinc
         if angle10 < 30:
             angle10 = 30
 
