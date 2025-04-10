@@ -1,0 +1,251 @@
+from machine import Pin, UART, PWM
+import time
+
+uart=UART(1, baudrate=9600, tx=4, rx=5)
+uart.init(bits=8, parity=None, stop=1, timeout=1000)
+
+led=Pin(25,Pin.OUT)
+halt = 15*100000 #nanoseconds
+
+motor_1 = PWM(Pin(6), freq=100, duty_ns=halt)
+motor_2 = PWM(Pin(7), freq=100, duty_ns=halt)
+motor_3 = PWM(Pin(11), freq=100, duty_ns=halt)
+
+motor_4 = PWM(Pin(9), freq=100, duty_ns=halt)
+motor_5 = PWM(Pin(10), freq=100, duty_ns=halt)
+motor_6 = PWM(Pin(8), freq=100, duty_ns=halt)
+
+SERVO2_PIN = Pin(22)  # main pitch
+SERVO1_PIN = Pin(21)  # rotation
+
+SERVO3_PIN = Pin(26)  # secondary pitch
+SERVO4_PIN = Pin(27) # roll
+SERVO5_PIN = Pin(28) # clamp
+
+# New servos
+SERVO6_PIN = Pin(20) # rotation
+SERVO7_PIN = Pin(19) # pitch
+
+SERVO8_PIN = Pin(18) # S. pitch
+SERVO9_PIN = Pin(17) # roll
+SERVO10_PIN = Pin(16) # clamp
+
+# PWM instances
+servo1 = PWM(SERVO1_PIN, freq=50)
+servo2 = PWM(SERVO2_PIN, freq=50)
+servo3 = PWM(SERVO3_PIN, freq=50)
+servo4 = PWM(SERVO4_PIN, freq=50)
+servo5 = PWM(SERVO5_PIN, freq=50)
+servo6 = PWM(SERVO6_PIN, freq=50) # new servo 1
+servo7 = PWM(SERVO7_PIN, freq=50) # new servo 2
+servo8 = PWM(SERVO8_PIN, freq=50) # new servo 3
+servo9 = PWM(SERVO9_PIN, freq=50) # new servo 4
+servo10 = PWM(SERVO10_PIN, freq=50) # new servo 5
+
+def brake():
+    motor_1.init(freq=100, duty_ns=halt)
+    motor_2.init(freq=100, duty_ns=halt)
+    motor_3.init(freq=100, duty_ns=halt)
+    motor_4.init(freq=100, duty_ns=halt)
+    motor_5.init(freq=100, duty_ns=halt)
+    motor_6.init(freq=100, duty_ns=halt)
+    
+def move(motor, v):
+    if v <= 5 and v >= -5:
+        motor.init(freq=100, duty_ns=((15+v)*100000)) #nanoseconds
+
+def smash():
+    motor_1.init(freq=100, duty_ns=1900000)
+    motor_2.init(freq=100, duty_ns=1900000)
+    motor_3.init(freq=100, duty_ns=1900000)
+    motor_4.init(freq=100, duty_ns=1900000)
+    motor_5.init(freq=100, duty_ns=1900000)
+    motor_6.init(freq=100, duty_ns=1900000)
+
+def turn_servo(servo, angle):
+    duty = int(angle / 180 * 10000)  
+    servo.duty_u16(duty)
+
+# Initial servo angles 
+angle1 = angle2 = angle3 = angle4 = angle5 = 90
+angle6 = angle7 = angle8 = angle9 = angle10 = 90
+
+s = 3
+
+cmd = ''
+while True:
+    
+    # Always turn servos to angles
+    turn_servo(servo1, angle1)
+    turn_servo(servo2, angle2)
+    turn_servo(servo3, angle3)
+    turn_servo(servo4, angle4)
+    turn_servo(servo5, angle5)
+    turn_servo(servo6, angle6) # new servo 1
+    turn_servo(servo7, angle7) # new servo 2
+    turn_servo(servo8, angle8) # new servo 3
+    turn_servo(servo9, angle9) # new servo 4
+    turn_servo(servo10, angle10) # new servo 5
+
+    if uart.any():
+        cmd = uart.read()
+        print(cmd)
+        
+    cmd = input()
+
+    if cmd == b'q':
+        brake()
+    elif cmd == b'e':
+        smash()
+    elif cmd == b'w':
+        move(motor_1, s)
+        move(motor_3, s)
+        move(motor_4, s)
+        move(motor_6, s)
+    elif cmd == b's':
+        move(motor_1, -s)
+        move(motor_3, -s)
+        move(motor_4, -s)
+        move(motor_6, -s)
+    elif cmd == b'a':
+        move(motor_1, -s)
+        move(motor_3, -s)
+        move(motor_4, s)
+        move(motor_6, s)
+    elif cmd == b'd':
+        move(motor_1, s)
+        move(motor_3, s)
+        move(motor_4, -s)
+        move(motor_6, -s)
+    elif cmd == b'r':
+        move(motor_2, s)
+        move(motor_5, s)
+    elif cmd == b'f':
+        move(motor_2, -s)
+        move(motor_5, -s)
+    elif cmd == b't':
+        s = 1
+    elif cmd == b'y':
+        s = 3
+    elif cmd == b'u':
+        s = 4
+        
+        # Reset
+    if cmd == '10':
+        angle1 = angle2 = angle3 = angle4 = angle5 = 90
+        angle6 = angle7 = angle8 = angle9 = angle10 = 90 # reset new servos
+
+    # Secondary pitch
+    if cmd == 'z':
+        angle1 += 1
+        if angle1 > 150:
+            angle1 = 150
+
+    elif cmd == 'x':
+        angle1 -= 1
+        if angle1 < 30:
+            angle1 = 30
+
+    # Roll
+    elif cmd == 'c':  
+        angle2 += 1
+        if angle2 > 150:
+            angle2 = 150
+
+    elif cmd == 'v':  
+        angle2 -= 1
+        if angle2 < 30:
+            angle2 = 30
+    
+    # Clamp
+    elif cmd == 'b':  
+        angle3 += 1
+        if angle3 > 150:
+            angle3 = 150
+
+    elif cmd == 'n':  
+        angle3 -= 1
+        if angle3 < 30:
+            angle3 = 30
+
+    # Main pitch
+    elif cmd == 'm':  
+        angle4 += 1
+        if angle4 > 150:
+            angle4 = 150
+
+    elif cmd == ',':  
+        angle4 -= 1
+        if angle4 < 30:
+            angle4 = 30          
+  
+    # Rotation
+    elif cmd == '.':  
+        angle5 += 1
+        if angle5 > 150:
+            angle5 = 150
+            
+    elif cmd == '/':  
+        angle5 -= 1
+        if angle5 < 30:
+            angle5 = 30
+
+    # Control new servos
+    # New servo 1
+    elif cmd == '1':
+        angle6 += 1
+        if angle6 > 150:
+            angle6 = 150
+  
+            
+    elif cmd == '2':
+        angle6 -= 1
+        if angle6 < 30:
+            angle6 = 30
+  
+
+    # New servo 2
+    elif cmd == '3':
+        angle7 += 1
+        if angle7 > 150:
+            angle7 = 150
+
+            
+    elif cmd == '4':
+        angle7 -= 1
+        if angle7 < 30:
+            angle7 = 30
+
+    # New servo 3
+    elif cmd == '5':
+        angle8 += 1
+        if angle8 > 150:
+            angle8 = 150
+            
+    elif cmd == '6':
+        angle8 -= 1
+        if angle8 < 30:
+            angle8 = 30
+
+    # New servo 4
+    elif cmd == '7':
+        angle9 += 1
+        if angle9 > 150:
+            angle9 = 150
+            
+    elif cmd == '8':
+        angle9 -= 1
+        if angle9 < 30:
+            angle9 = 30
+
+    # New servo 5
+    elif cmd == '9':
+        angle10 += 1
+        if angle10 > 150:
+            angle10 = 150
+            
+    elif cmd == '0':
+        angle10 -= 1
+        if angle10 < 30:
+            angle10 = 30
+
